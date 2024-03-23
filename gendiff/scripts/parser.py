@@ -1,6 +1,6 @@
 import argparse
 import json
-from gendiff.generate_diff import generate_diff, json_dumps
+from gendiff.generate_diff import generate_diff, stringify
 
 
 def parse_args():
@@ -24,4 +24,4 @@ def parse_args():
         file1 = json.load(f1)
         file2 = json.load(f2)
   
-    print(json_dumps(generate_diff(file1, file2)))
+    print(stringify(generate_diff(file1, file2)))

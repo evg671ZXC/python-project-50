@@ -5,27 +5,21 @@ def generate_diff(data_file1, data_file2):
       if key in data_file1 and key not in data_file2:
         diff[key] = {
           'status': '-',
-          'value': data_file1[key]
+          'value': data_file1[key],
         }
       elif key in data_file2 and key not in data_file1:
         diff[key] = {
           'status': '+',
-          'value': data_file2[key]
+          'value': data_file2[key],
         }
       else:
-        if isinstance(data_file1[key], dict) and isinstance(data_file2[key], dict):
-          diff[key] = {
-            'status': 'not str',
-            'value': internal_gen(data_file1[key], data_file2[key], {})
-          }
-        else:
-          if data_file1[key] != data_file2[key]:
+        if data_file1[key] != data_file2[key]:
             diff[key] = {
               'status': 'not equal',
-              'value1': data_file1[key],
-              'value2': data_file2[key]
+              'value': data_file2[key],
+              'old_value': data_file1[key]
             }
-          else:
+        else:
             diff[key] = {
               'status': 'equal',
               'value': data_file1[key]
@@ -34,25 +28,39 @@ def generate_diff(data_file1, data_file2):
   return internal_gen(data_file1, data_file2, {})
 
 
-def convert_to_json(data_diff, space = "  "):
-  result = []
-  for key, value in data_diff.items():
-    if value['status'] == 'not str':
-      result.append(f'{space}  {key}: {convert_to_json(value["value"])}')
-    elif value['status'] == 'equal':
-      result.append(f'{space}  {key}: {value["value"]}')
-    elif value['status'] == 'not equal':
-      result.append(f'{space}- {key}: {value["value1"]}')
-      result.append(f'{space}+ {key}: {value["value2"]}')
-    elif value['status'] == '-':
-      result.append(f'{space}- {key}: {value["value"]}')
-    else:
-      result.append(f'{space}+ {key}: {value["value"]}')
-  return result
-
-
-def json_dumps(data_diff):
-  return '{' + '\n' + \
-  '\n'.join((convert_to_json(data_diff))) \
-  + '\n' + '}'
+def stringify(data_diff, replacer = " ", space_count = 1):
+    result = []
+    spaces = replacer * space_count
   
+    def walk(options, depth):
+
+      if not isinstance(options, dict):
+        return str(options)
+
+      lines = []
+      
+      nested_depth = depth + space_count
+      nested_indent = (nested_depth + 1) * replacer
+
+      for key, val in options.items():
+        line = f"{nested_indent}  {key}: {walk(val, nested_depth)}"
+        lines.append(line)
+      return '{\n' +'\n'.join(lines) + '\n' + nested_indent +'}'
+
+    for key, value in data_diff.items():
+  
+      sign = value["status"] + " "
+  
+      if value["status"] == "equal":
+        sign = '  '
+
+      elif value["status"] == "not equal":
+        sign = "+ "
+        line_not_equal = f"\n{spaces}{sign}{key}: {walk(value['old_value'], space_count)}"
+        result.append(line_not_equal)
+        sign = "- "
+
+      line_res = f"\n{spaces}{sign}{key}: {walk(value['value'], space_count)}"
+      result.append(line_res)
+
+    return "{" + ",".join(result) + "\n}"
