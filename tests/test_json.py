@@ -13,4 +13,4 @@ files = get_dict(json_file1, json_file2)
     (linkage_for_json, stylish_json)
 ])
 def test_gendiff(stylish_func, verification):
-    assert stylish_func(*files) == stylish_json
+    assert stylish_func(*files) == verification
