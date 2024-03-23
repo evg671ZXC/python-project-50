@@ -1,8 +1,8 @@
-from gendiff.scripts.parser import parse_args
+from gendiff.linkage_gendiff import get_gendiff
 
 
 def main():
-    parse_args()
+    print(get_gendiff())
 
 
 if __name__ == '__main__':
