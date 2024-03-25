@@ -28,11 +28,12 @@ def stringify(data_diff, replacer="  ", space_count=1):
 
         elif value["status"] == "not equal":
             sign = "+ "
-            line_not_equal = f"\n{spaces}{sign}{key}: {walk(value['old_value'], space_count)}"
+            line_not_equal = \
+                f"\n{spaces}{sign}{key}: {walk(value['old_value'],space_count)}"
             result.append(line_not_equal)
             sign = "- "
 
-        line_res = f"\n{spaces}{sign}{key}: {walk(value['value'], space_count)}"
+        line_res = f"\n{spaces}{sign}{key}: {walk(value['value'],space_count)}"
         result.append(line_res)
 
     return "{" + ",".join(result) + "\n}"
