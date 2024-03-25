@@ -1,4 +1,4 @@
-def stringify(data_diff, replacer=" ", space_count=1):
+def stringify(data_diff, replacer="  ", space_count=1):
     result = []
     spaces = replacer * space_count
 
@@ -11,12 +11,13 @@ def stringify(data_diff, replacer=" ", space_count=1):
 
         nested_depth = depth + space_count
         nested_indent = (nested_depth + 1) * replacer
+        current_indent = (depth + 1) * replacer
 
         for key, val in options.items():
-            line = f"{nested_indent}  {key}: {walk(val, nested_depth)}"
+            line = f"{nested_indent}{key}: {walk(val, nested_depth)}"
             lines.append(line)
 
-        return '{\n' + '\n'.join(lines) + '\n' + nested_indent + '}'
+        return '{\n' + '\n'.join(lines) + '\n' + current_indent + '}'
 
     for key, value in data_diff.items():
 
