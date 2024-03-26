@@ -3,6 +3,7 @@ from gendiff.formats.stylish_json import stringify
 from gendiff.scripts.cli import parse_args
 from gendiff.scripts.file_reader import get_dict
 
+
 file1 = get_dict(parse_args().first_file)
 file2 = get_dict(parse_args().second_file)
 
