@@ -4,25 +4,32 @@ def generate_diff(data_file1, data_file2):
         for key in keys:
             if key in data_file1 and key not in data_file2:
                 diff[key] = {
-                    'status': '-',
+                    'status': 'Removed',
                     'value': data_file1[key],
                 }
             elif key in data_file2 and key not in data_file1:
                 diff[key] = {
-                    'status': '+',
+                    'status': 'Added',
                     'value': data_file2[key],
                 }
             else:
-                if data_file1[key] != data_file2[key]:
+                if isinstance(data_file1[key], dict) \
+               and isinstance(data_file2[key], dict):
                     diff[key] = {
-                        'status': 'not equal',
-                        'value': data_file2[key],
-                        'old_value': data_file1[key]
+                        'status': 'Depth diff',
+                        'value': internal_gen(data_file1[key], data_file2[key], {})
                     }
                 else:
-                    diff[key] = {
-                        'status': 'equal',
-                        'value': data_file1[key]
-                    }
+                    if data_file1[key] != data_file2[key]:
+                        diff[key] = {
+                            'status': 'not equal',
+                            'value': data_file2[key],
+                            'old_value': data_file1[key]
+                        }
+                    else:
+                        diff[key] = {
+                            'status': 'equal',
+                            'value': data_file1[key]
+                        }
         return diff
     return internal_gen(data_file1, data_file2, {})
