@@ -4,31 +4,31 @@ def generate_diff(data_file1, data_file2):
         for key in keys:
             if key in data_file1 and key not in data_file2:
                 diff[key] = {
-                    'status': 'Removed',
+                    'state': 'REMOVED',
                     'value': data_file1[key],
                 }
             elif key in data_file2 and key not in data_file1:
                 diff[key] = {
-                    'status': 'Added',
+                    'state': 'ADDED',
                     'value': data_file2[key],
                 }
             else:
                 if isinstance(data_file1[key], dict) \
-               and isinstance(data_file2[key], dict):
+                and isinstance(data_file2[key], dict):
                     diff[key] = {
-                        'status': 'Depth diff',
+                        'state': 'NESTED',
                         'value': internal_gen(data_file1[key], data_file2[key], {})
                     }
                 else:
                     if data_file1[key] != data_file2[key]:
                         diff[key] = {
-                            'status': 'not equal',
+                            'state': 'CHANGED',
                             'value': data_file2[key],
                             'old_value': data_file1[key]
                         }
                     else:
                         diff[key] = {
-                            'status': 'equal',
+                            'state': 'UNCHANGED',
                             'value': data_file1[key]
                         }
         return diff
