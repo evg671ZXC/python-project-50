@@ -1,11 +1,14 @@
 from gendiff.generate_diff import generate_diff
 from gendiff.formats import renderer
 from gendiff.scripts.cli import parse_args
-from gendiff.scripts.file_reader import get_dict
+from gendiff.scripts.file_reader import reader, get_extension
 
 
-file1 = get_dict(parse_args().first_file)
-file2 = get_dict(parse_args().second_file)
+file1_path = parse_args().first_file
+file2_path = parse_args().second_file
+
+file1 = reader(file1_path, get_extension(file1_path))
+file2 = reader(file2_path, get_extension(file2_path))
 
 
 def linkage_for_json(dict1, dict2):

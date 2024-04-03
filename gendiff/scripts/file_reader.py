@@ -1,7 +1,15 @@
 import json
+import yaml
 
 
-def get_dict(path_file):
+def get_extension(file):
+    return file.split('.')[1:][1]
+
+
+def reader(path_file, extension):
     with open(path_file) as f:
-        file = json.load(f)
-    return file
+        if extension in ('yml', 'yaml'):
+            return yaml.load(f, Loader=yaml.FullLoader)
+        if extension == "json":
+            return json.load(f)
+        raise ValueError(f"Invalid file format selected: {extension}")

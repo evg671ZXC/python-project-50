@@ -1,35 +1,39 @@
-def generate_diff(data_file1, data_file2):
-    def internal_gen(data_file1, data_file2, diff):
-        keys = sorted(set(data_file1.keys()) | set(data_file2.keys()))
-        for key in keys:
-            if key in data_file1 and key not in data_file2:
-                diff[key] = {
-                    'state': 'REMOVED',
-                    'value': data_file1[key],
-                }
-            elif key in data_file2 and key not in data_file1:
-                diff[key] = {
-                    'state': 'ADDED',
-                    'value': data_file2[key],
-                }
+def operation_for_key(data, operation_type):
+    return {"state": operation_type, "value": data}
+
+
+def create_updated_dict(data1, data2, key):
+    return {"state": "CHANGED", "value": data2[key], "old_value": data1[key]}
+
+
+def operation_for_modified(data1, data2, key):
+    if isinstance(data1[key], dict) and isinstance(data2[key], dict):
+        return {"state": "NESTED",
+                "value": generate_diff(data1[key], data2[key])}
+    elif data1[key] == data2[key]:
+        return {"state": "UNCHANGED", "value": data1[key]}
+    else:
+        return create_updated_dict(data1[key], data2[key], key)
+
+
+def generate_diff(data1, data2):
+    result = {}
+
+    keys = data1.keys() | data2.keys()
+    added = data2.keys() - data1.keys()
+    removed = data1.keys() - data2.keys()
+
+    for key in keys:
+        if key in added:
+            result[key] = operation_for_key(data2[key], "ADDED")
+        elif key in removed:
+            result[key] = operation_for_key(data1[key], "REMOVED")
+        else:
+            if isinstance(data1[key], dict) or isinstance(data2[key], dict):
+                result[key] = operation_for_modified(data1, data2, key)
+            elif data1[key] != data2[key]:
+                result[key] = create_updated_dict(data1, data2, key)
             else:
-                if isinstance(data_file1[key], dict) \
-                and isinstance(data_file2[key], dict):
-                    diff[key] = {
-                        'state': 'NESTED',
-                        'value': internal_gen(data_file1[key], data_file2[key], {})
-                    }
-                else:
-                    if data_file1[key] != data_file2[key]:
-                        diff[key] = {
-                            'state': 'CHANGED',
-                            'value': data_file2[key],
-                            'old_value': data_file1[key]
-                        }
-                    else:
-                        diff[key] = {
-                            'state': 'UNCHANGED',
-                            'value': data_file1[key]
-                        }
-        return diff
-    return internal_gen(data_file1, data_file2, {})
+                result[key] = {"state": "UNCHANGED", "value": data1[key]}
+
+    return dict(sorted(result.items(), key=lambda item: item[0]))

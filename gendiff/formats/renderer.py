@@ -7,16 +7,20 @@ operator = {
 }
 
 
+def get_lower(value):
+    return str(value).lower()
+
+
 def render_value(value, indent) -> str:
     if isinstance(value, dict):
         temp = []
-        whitespaces = "".rjust(indent+3)
+        whitespaces = "".rjust(indent + 3)
         for k, v in value.items():
             line = f"{whitespaces}{k}: {v}\n"
             temp.append(line)
-        return "{\n" + ''.join(temp) + "}".rjust(indent+4)
+        return "{\n" + ''.join(temp) + "}".rjust(indent + 4)
     else:
-        return value
+        return get_lower(value)
 
 
 def do_rendering(diff: dict, indent=1):
@@ -27,31 +31,31 @@ def do_rendering(diff: dict, indent=1):
         if state == 'NESTED':
             rend_line = do_rendering(value['value'], indent + 4)
             rend_line = operator[state].format(
-                ws = ws,
-                k = key,
-                v = rend_line,
-                op_br = '{',
-                cl_br='}'.rjust(indent + 3)  
+                ws=ws,
+                k=key,
+                v=rend_line,
+                op_br='{',
+                cl_br='}'.rjust(indent + 3)
             )
-        
+
         elif state == 'CHANGED':
             before = render_value(value['value'], indent)
             after = render_value(value['old_value'], indent)
             rend_line = operator[state].format(
-                ws = ws,
-                k = key,
-                v1 = after,
-                v2 = before
+                ws=ws,
+                k=key,
+                v1=after,
+                v2=before
             )
 
         else:
             new_value = render_value(value['value'], indent)
             rend_line = operator[state].format(
-                ws = ws,
-                k = key,
-                v = new_value
+                ws=ws,
+                k=key,
+                v=new_value
             )
-            
+
         rendered_lines.append(rend_line)
     return ''.join(rendered_lines)
 

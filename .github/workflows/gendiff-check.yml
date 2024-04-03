@@ -9,9 +9,10 @@ jobs:
               run: |
                   pip install poetry
                   make install
-            - name: Run pytest
+            - name: Run pytest and flake8
               run: |
                   make pytest
+                  make lint
             - name: Test & publish code coverage
               uses: paambaati/codeclimate-action@v5.0.0
               if: github.ref_name == 'main'
