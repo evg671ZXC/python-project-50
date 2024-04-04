@@ -7,4 +7,10 @@
 
 ### gendiff work with flat structures
 
+#### .JSON
+
 [![asciicast](https://asciinema.org/a/647948.svg)](https://asciinema.org/a/647948)
+
+#### .yaml
+
+[![asciicast](https://asciinema.org/a/650834.svg)](https://asciinema.org/a/650834)
