@@ -3,7 +3,7 @@ import yaml
 
 
 def get_extension(file):
-    return file.split('.')[1:][1]
+    return file[1:].split('.')[1]
 
 
 def reader(path_file, extension):
