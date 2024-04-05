@@ -3,12 +3,14 @@ operator = {
     'REMOVED': "{ws}- {k}: {v}\n",
     'UNCHANGED': "{ws}  {k}: {v}\n",
     'CHANGED': "{ws}- {k}: {v1}\n{ws}+ {k}: {v2}\n",
-    'NESTED': "  {ws}{k}: {op_br}\n{v}{cl_br}\n"
+    'NESTED': "{ws}{s} {k}: {op_br}\n{v}{cl_br}\n"
 }
 
 
-def get_lower(value):
-    return str(value).lower()
+def get_typed_value(value):
+    if value is not None:
+        return str(value).lower() if isinstance(value, bool) else value
+    return "null"
 
 
 def render_value(value, indent) -> str:
@@ -20,7 +22,7 @@ def render_value(value, indent) -> str:
             temp.append(line)
         return "{\n" + ''.join(temp) + "}".rjust(indent + 4)
     else:
-        return get_lower(value)
+        return get_typed_value(value)
 
 
 def do_rendering(diff: dict, indent=1):
@@ -28,10 +30,19 @@ def do_rendering(diff: dict, indent=1):
     ws = "".rjust(indent)
     for key, value in diff.items():
         state = value['state']
+        substate = value.get('sub_state', None)
         if state == 'NESTED':
+            if substate == 'ADDED':
+                sign = '+'
+            elif substate == 'REMOVED':
+                sign = '-'
+            else:
+                sign = ' '
+
             rend_line = do_rendering(value['value'], indent + 4)
             rend_line = operator[state].format(
                 ws=ws,
+                s=sign,
                 k=key,
                 v=rend_line,
                 op_br='{',

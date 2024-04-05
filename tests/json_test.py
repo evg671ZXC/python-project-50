@@ -4,11 +4,11 @@ from tests.fixtures.verification import stylish_json
 from gendiff.scripts.file_reader import reader, get_extension
 from gendiff.linkage_gendiff import get_json_gendiff
 
-json_file1 = './tests/fixtures/file1.json'
-json_file2 = './tests/fixtures/file2.json'
+json_file1 = './tests/fixtures/nested/file1.json'
+json_file2 = './tests/fixtures/nested/file2.json'
 
-yaml_file1 = './tests/fixtures/file1.yml'
-yaml_file2 = './tests/fixtures/file2.yml'
+yaml_file1 = './tests/fixtures/nested/file1.yml'
+yaml_file2 = './tests/fixtures/nested/file2.yml'
 
 
 @pytest.mark.parametrize('file1, file2, expected', [
