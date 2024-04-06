@@ -1,4 +1,4 @@
-stylish_json = """{
+stylish_nested_check = """{
     common: {
       + follow: false
         setting1: Value 1
@@ -43,7 +43,7 @@ stylish_json = """{
     }
 }"""
 
-stylish_yaml = """{
+stylish_plain_check = """{
   - follow: false
     host: hexlet.io
   - proxy: 123.234.53.22
