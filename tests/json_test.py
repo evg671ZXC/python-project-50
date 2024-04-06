@@ -35,4 +35,5 @@ def test_cli(flag, use_format, file1, file2, expected):
 ])
 def test_gendiff(file1, file2, expected):
     assert get_out_by_format(file1, file2, "stylish") == expected
-    # assert get_out_by_format(file1, file2, "FooBazz") == Exception
+    with pytest.raises(Exception):
+        get_out_by_format(file1, file2, "FooBazz")
