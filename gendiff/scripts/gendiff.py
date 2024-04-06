@@ -1,7 +1,6 @@
 import sys
 from gendiff.scripts.cli import parse_args
 from gendiff.scripts.file_reader import reader, get_extension
-from gendiff.formats.stylish import get_stylish_gendiff
 from gendiff.formats.format_selector import get_out_by_format
 
 args = parse_args(sys.argv[1:])
