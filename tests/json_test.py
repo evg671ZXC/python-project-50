@@ -2,6 +2,7 @@ import pytest
 from gendiff.scripts.cli import parse_args
 from tests.fixtures.verification import stylish_nested_check
 from tests.fixtures.verification import plain_nested_check
+from tests.fixtures.verification import json_nested_check
 from gendiff.scripts.file_reader import reader, get_extension
 from gendiff.formats.format_selector import get_out_by_format
 
@@ -32,8 +33,9 @@ def test_cli(flag, use_format, file1, file2, expected):
         reader(yaml_file2, get_extension(yaml_file2))
     )
 ])
-def test_gendiff(file1, file2):
+def test_gendiff_output(file1, file2):
     assert get_out_by_format(file1, file2, "stylish") == stylish_nested_check
     assert get_out_by_format(file1, file2, "plain") == plain_nested_check
+    assert get_out_by_format(file1, file2, "json") == json_nested_check
     with pytest.raises(Exception):
         get_out_by_format(file1, file2, "FooBazz")
