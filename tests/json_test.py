@@ -13,10 +13,10 @@ yaml_file2 = './tests/fixtures/nested/file2.yml'
 
 
 @pytest.mark.parametrize('flag, use_format, file1, file2, expected', [
-    ('-f', 'stylish', '~/path/file1', '~/path/file2', 
-    ('stylish','~/path/file1', '~/path/file2')),
-    ('-f', 'plain', '~/path/file1', '~/path/file2', 
-    ('plain','~/path/file1', '~/path/file2'))
+    ('-f', 'stylish', '~/path/file1', '~/path/file2',
+    ('stylish', '~/path/file1', '~/path/file2')),
+    ('-f', 'plain', '~/path/file1', '~/path/file2',
+    ('plain', '~/path/file1', '~/path/file2'))
 ])
 def test_cli(flag, use_format, file1, file2, expected):
     args = parse_args([flag, use_format, file1, file2])
