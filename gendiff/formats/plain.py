@@ -1,4 +1,4 @@
-from gendiff.generate_diff import generate_diff
+from gendiff.generate_diff import constuction_diff
 
 plain_operator = {
     'ADDED': "Property {path} was added with value: {v}",
@@ -52,4 +52,4 @@ def render_plain(data, path=""):
 
 
 def get_plain_gendiff(dict1, dict2):
-    return render_plain(generate_diff(dict1, dict2))
+    return render_plain(constuction_diff(dict1, dict2))

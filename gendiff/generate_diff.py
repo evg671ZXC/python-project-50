@@ -2,7 +2,7 @@ def operation_for_key(data, state):
     if isinstance(data, dict):
         return {"state": "NESTED",
                 "sub_state": state,
-                "value": generate_diff(data, data)}
+                "value": constuction_diff(data, data)}
     else:
         return {"state": state, "value": data}
 
@@ -11,7 +11,7 @@ def operation_for_modified(data1, data2, key):
     if isinstance(data1[key], dict) and \
             isinstance(data2[key], dict):
         return ({"state": "NESTED",
-                 "value": generate_diff(data1[key], data2[key])})
+                 "value": constuction_diff(data1[key], data2[key])})
     elif data1[key] != data2[key]:
         return ({"state": "CHANGED",
                  "value": data2[key],
@@ -21,7 +21,7 @@ def operation_for_modified(data1, data2, key):
                  "value": data1[key]})
 
 
-def generate_diff(data1, data2):
+def constuction_diff(data1, data2):
     result = {}
 
     keys = data1.keys() | data2.keys()
