@@ -12,6 +12,8 @@ def get_correct_value(value):
         return '[complex value]'
     elif isinstance(value, bool):
         return str(value).lower()
+    elif isinstance(value, int):
+        return str(value)
     elif value is None:
         return 'null'
     return f"\'{value}\'"
