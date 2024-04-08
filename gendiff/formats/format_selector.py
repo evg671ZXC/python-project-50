@@ -17,7 +17,7 @@ def get_out_by_format(data1, data2, user_format):
                          enter the plain/stylish')
 
 
-def generate_diff(file1_path, file2_path, user_format):
+def generate_diff(file1_path, file2_path, user_format="stylish"):
     dict1 = reader(file1_path, get_extension(file1_path))
     dict2 = reader(file2_path, get_extension(file2_path))
     return get_out_by_format(dict1, dict2, user_format)
