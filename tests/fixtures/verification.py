@@ -23,8 +23,8 @@ stylish_nested_check = """{
       + baz: bars
         foo: bar
       - nest: {
-         key: value
-         }
+            key: value
+        }
       + nest: str
     }
   - group2: {

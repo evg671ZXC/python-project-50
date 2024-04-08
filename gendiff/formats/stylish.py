@@ -18,11 +18,11 @@ def get_typed_value(value):
 def render_value(value, indent) -> str:
     if isinstance(value, dict):
         temp = []
-        whitespaces = "".rjust(indent + 3)
+        whitespaces = "".rjust(indent + 6)
         for k, v in value.items():
             line = f"{whitespaces}{k}: {v}\n"
             temp.append(line)
-        return "{\n" + ''.join(temp) + "}".rjust(indent + 4)
+        return "{\n" + ''.join(temp) + "}".rjust(indent + 3)
     else:
         return get_typed_value(value)
 
