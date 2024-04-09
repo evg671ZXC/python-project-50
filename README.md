@@ -71,7 +71,7 @@ gendiff -h
 
 [![asciicast](https://asciinema.org/a/651778.svg)](https://asciinema.org/a/651778)
 
-### Get the program skeleton:
+### Get the program skeleton
 
 #### `-f json`
 
