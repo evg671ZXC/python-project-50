@@ -43,7 +43,7 @@ def test_cli(flag, use_format, file1, file2, expected):
 ])
 def test_gendiff_output(format, file1, file2, verification):
     with open(verification) as f:
-        test_string = f.read()
+        expected = f.read()
     with pytest.raises(Exception):
         generate_diff(file1, file2, "FooBazz")
-    assert generate_diff(file1, file2, format) == test_string
+    assert generate_diff(file1, file2, format) == expected
