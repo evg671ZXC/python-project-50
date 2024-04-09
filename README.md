@@ -63,14 +63,16 @@ gendiff -h
 
 ### Support for comparing nested structures and displaying them visually
 
-#### -f stylish (_default_)
+#### `-f stylish` (_default_)
 
 [![asciicast](https://asciinema.org/a/651777.svg)](https://asciinema.org/a/651777)
 
-#### -f plain
+#### `-f plain`
 
 [![asciicast](https://asciinema.org/a/651778.svg)](https://asciinema.org/a/651778)
 
-### Get the program skeleton you need to enter the command: `-f json`
+### Get the program skeleton:
+
+#### `-f json`
 
 [![asciicast](https://asciinema.org/a/651784.svg)](https://asciinema.org/a/651784)
