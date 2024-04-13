@@ -1,6 +1,6 @@
 import sys
 from gendiff.scripts.cli import parse_args
-from gendiff.formats.format_selector import generate_diff
+from gendiff.generate_diff import generate_diff
 
 
 def main():

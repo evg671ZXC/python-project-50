@@ -1,5 +1,3 @@
-from gendiff.generate_diff import constuction_diff
-
 plain_operator = {
     'ADDED': "Property {path} was added with value: {v}",
     'REMOVED': "Property {path} was removed",
@@ -53,5 +51,5 @@ def render_plain(data, path=""):
     return "\n".join(result)
 
 
-def get_plain_gendiff(dict1, dict2):
-    return render_plain(constuction_diff(dict1, dict2))
+def get_plain_gendiff(diffs):
+    return render_plain(diffs)

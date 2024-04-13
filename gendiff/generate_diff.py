@@ -1,38 +1,51 @@
-def operation_for_key(data, state):
-    if isinstance(data, dict):
+from gendiff.scripts.file_reader import reader, get_extension
+from gendiff.formats.format_selector import get_out_by_format
+
+
+def process_key(key, state, data1, data2, build_diff):
+    if isinstance(data1.get(key), dict) and isinstance(data2.get(key), dict):
         return {"state": "NESTED",
-                "sub_state": state,
-                "value": constuction_diff(data, data)}
+                "value": build_diff(data1.get(key), data2.get(key))}
+    elif data1.get(key) != data2.get(key):
+        if state == "CHANGED":
+            return {"state": state,
+                    "value": data2.get(key),
+                    "old_value": data1.get(key)}
+        elif isinstance(data1.get(key), dict):
+            return {"state": "NESTED",
+                    "sub_state": state,
+                    "value": build_diff(data1.get(key), data1.get(key))}
+        elif isinstance(data2.get(key), dict):
+            return {"state": "NESTED",
+                    "sub_state": state,
+                    "value": build_diff(data2.get(key), data2.get(key))}
+        else:
+            return {"state": state,
+                    "value": data2.get(key) if state == "ADDED" else data1.get(key)}
     else:
-        return {"state": state, "value": data}
+        return {"state": "UNCHANGED",
+                "value": data1.get(key)}
 
 
-def operation_for_modified(data1, data2, key):
-    if isinstance(data1[key], dict) and \
-            isinstance(data2[key], dict):
-        return ({"state": "NESTED",
-                 "value": constuction_diff(data1[key], data2[key])})
-    elif data1[key] != data2[key]:
-        return ({"state": "CHANGED",
-                 "value": data2[key],
-                 "old_value": data1[key]})
-    else:
-        return ({"state": "UNCHANGED",
-                 "value": data1[key]})
-
-
-def constuction_diff(data1, data2):
+def build_diff(data1, data2):
     result = {}
-
-    keys = data1.keys() | data2.keys()
+    keys = set(data1.keys()).union(data2.keys())
     added = data2.keys() - data1.keys()
     removed = data1.keys() - data2.keys()
 
     for key in keys:
         if key in added:
-            result[key] = operation_for_key(data2[key], "ADDED")
+            result[key] = process_key(key, "ADDED", data1, data2, build_diff)
         elif key in removed:
-            result[key] = operation_for_key(data1[key], "REMOVED")
+            result[key] = process_key(key, "REMOVED", data1, data2, build_diff)
         else:
-            result[key] = operation_for_modified(data1, data2, key)
+            result[key] = process_key(key, "CHANGED", data1, data2, build_diff)
+
     return dict(sorted(result.items(), key=lambda item: item))
+
+
+def generate_diff(file1_path, file2_path, user_format="stylish"):
+    dict1 = reader(file1_path, get_extension(file1_path))
+    dict2 = reader(file2_path, get_extension(file2_path))
+    diffs = build_diff(dict1, dict2)
+    return get_out_by_format(diffs, user_format)

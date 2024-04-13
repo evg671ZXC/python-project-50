@@ -1,6 +1,6 @@
 import pytest
 from gendiff.scripts.cli import parse_args
-from gendiff.formats.format_selector import generate_diff
+from gendiff.generate_diff import generate_diff
 
 json_file1 = './tests/fixtures/nested/file1.json'
 json_file2 = './tests/fixtures/nested/file2.json'

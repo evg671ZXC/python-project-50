@@ -1,5 +1,3 @@
-from gendiff.generate_diff import constuction_diff
-
 operator = {
     'ADDED': "{ws}+ {k}: {v}\n",
     'REMOVED': "{ws}- {k}: {v}\n",
@@ -78,5 +76,5 @@ def render_stylish(diff: dict) -> str:
     return "{\n" + result + "}"
 
 
-def get_stylish_gendiff(dict1, dict2):
-    return render_stylish(constuction_diff(dict1, dict2))
+def get_stylish_gendiff(diffs):
+    return render_stylish(diffs)
