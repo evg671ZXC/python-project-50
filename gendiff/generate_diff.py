@@ -2,7 +2,7 @@ from gendiff.scripts.file_reader import reader, get_extension
 from gendiff.formats.format_selector import get_out_by_format
 
 
-def process_key(key, state, data1, data2, build_diff):
+def process_key(key, state, data1, data2):
     value1 = data1.get(key)
     value2 = data2.get(key)
 
@@ -38,11 +38,11 @@ def build_diff(data1, data2):
 
     for key in keys:
         if key in added:
-            result[key] = process_key(key, "ADDED", data1, data2, build_diff)
+            result[key] = process_key(key, "ADDED", data1, data2)
         elif key in removed:
-            result[key] = process_key(key, "REMOVED", data1, data2, build_diff)
+            result[key] = process_key(key, "REMOVED", data1, data2)
         else:
-            result[key] = process_key(key, "CHANGED", data1, data2, build_diff)
+            result[key] = process_key(key, "CHANGED", data1, data2)
 
     return dict(sorted(result.items(), key=lambda item: item))
 
