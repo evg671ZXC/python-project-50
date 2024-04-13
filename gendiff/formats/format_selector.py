@@ -1,15 +1,15 @@
-from gendiff.formats.stylish import get_stylish_gendiff
-from gendiff.formats.plain import get_plain_gendiff
-from gendiff.formats.json import get_json_gendiff
+from gendiff.formats.stylish import render_stylish
+from gendiff.formats.plain import render_plain
+from gendiff.formats.json import render_json
 
 
 def get_out_by_format(diffs, user_format):
     if user_format == 'stylish':
-        return get_stylish_gendiff(diffs)
+        return render_stylish(diffs)
     elif user_format == 'plain':
-        return get_plain_gendiff(diffs)
+        return render_plain(diffs)
     elif user_format == 'json':
-        return get_json_gendiff(diffs)
+        return render_json(diffs)
     else:
         raise Exception('The format you have chosen: '
                         f'{user_format} is not supported,\

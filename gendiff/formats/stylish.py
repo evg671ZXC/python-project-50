@@ -3,7 +3,7 @@ operator = {
     'REMOVED': "{ws}- {k}: {v}\n",
     'UNCHANGED': "{ws}  {k}: {v}\n",
     'CHANGED': "{ws}- {k}: {v1}\n{ws}+ {k}: {v2}\n",
-    'NESTED': "{ws}{s} {k}: {op_br}\n{v}{cl_br}\n"
+    'NESTED': "{ws}  {k}: {op_br}\n{v}{cl_br}\n"
 }
 
 
@@ -18,7 +18,7 @@ def render_value(value, indent) -> str:
         temp = []
         whitespaces = "".rjust(indent + 6)
         for k, v in value.items():
-            line = f"{whitespaces}{k}: {v}\n"
+            line = f"{whitespaces}{k}: {render_value(v, indent + 4)}\n"
             temp.append(line)
         return "{\n" + ''.join(temp) + "}".rjust(indent + 3)
     else:
@@ -29,20 +29,11 @@ def do_rendering(diff: dict, indent=1):
     rendered_lines = []
     ws = "".rjust(indent)
     for key, value in diff.items():
-        state = value['state']
-        substate = value.get('sub_state', None)
+        state = value['type']
         if state == 'NESTED':
-            if substate == 'ADDED':
-                sign = '+'
-            elif substate == 'REMOVED':
-                sign = '-'
-            else:
-                sign = ' '
-
             rend_line = do_rendering(value['value'], indent + 4)
             rend_line = operator[state].format(
                 ws=ws,
-                s=sign,
                 k=key,
                 v=rend_line,
                 op_br='{',
@@ -74,7 +65,3 @@ def do_rendering(diff: dict, indent=1):
 def render_stylish(diff: dict) -> str:
     result = do_rendering(diff, indent=2)
     return "{\n" + result + "}"
-
-
-def get_stylish_gendiff(diffs):
-    return render_stylish(diffs)

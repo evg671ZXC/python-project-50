@@ -1,5 +1,5 @@
 import json
 
 
-def get_json_gendiff(diffs):
+def render_json(diffs):
     return json.dumps(diffs)

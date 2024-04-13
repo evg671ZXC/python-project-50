@@ -8,18 +8,17 @@ plain_operator = {
 def get_correct_value(value):
     if isinstance(value, dict):
         return '[complex value]'
-    elif isinstance(value, bool):
+    if isinstance(value, bool):
         return str(value).lower()
-    elif isinstance(value, int):
+    if isinstance(value, int):
         return str(value)
-    elif value is None:
+    if value is None:
         return 'null'
     return f"\'{value}\'"
 
 
 def construction_line(v, path_build):
-    substate = v.get('sub_state', None)
-    state = v['state'] if substate is None else substate
+    state = v['type']
 
     path = get_correct_value(path_build[:-1])
     value = get_correct_value(v['value'])
@@ -49,7 +48,3 @@ def render_plain(data, path=""):
         else:
             continue
     return "\n".join(result)
-
-
-def get_plain_gendiff(diffs):
-    return render_plain(diffs)

@@ -2,34 +2,6 @@ from gendiff.scripts.file_reader import reader, get_extension
 from gendiff.formats.format_selector import get_out_by_format
 
 
-def process_key(key, state, data1, data2):
-    value1 = data1.get(key)
-    value2 = data2.get(key)
-
-    if isinstance(value1, dict) and isinstance(value2, dict):
-        return {"state": "NESTED",
-                "value": build_diff(value1, value2)}
-    elif value1 != value2:
-        if state == "CHANGED":
-            return {"state": state,
-                    "value": value2,
-                    "old_value": value1}
-        elif isinstance(value1, dict):
-            return {"state": "NESTED",
-                    "sub_state": state,
-                    "value": build_diff(value1, value1)}
-        elif isinstance(value2, dict):
-            return {"state": "NESTED",
-                    "sub_state": state,
-                    "value": build_diff(value2, value2)}
-        else:
-            return {"state": state,
-                    "value": value2 if state == "ADDED" else value1}
-    else:
-        return {"state": "UNCHANGED",
-                "value": value1}
-
-
 def build_diff(data1, data2):
     result = {}
     keys = set(data1.keys()).union(data2.keys())
@@ -38,12 +10,37 @@ def build_diff(data1, data2):
 
     for key in keys:
         if key in added:
-            result[key] = process_key(key, "ADDED", data1, data2)
+            result[key] = {
+                "key": key,
+                "value": data2[key],
+                "type": "ADDED"
+            }
         elif key in removed:
-            result[key] = process_key(key, "REMOVED", data1, data2)
+            result[key] = {
+                "key": key,
+                "value": data1[key],
+                "type": "REMOVED"
+            }
+        elif data1[key] == data2[key]:
+            result[key] = {
+                "key": key,
+                "old_value": data1[key],
+                "value": data2[key],
+                "type": "UNCHANGED"
+            }
+        elif isinstance(data1[key], dict) and isinstance(data2[key], dict):
+            result[key] = {
+                "key": key,
+                "value": build_diff(data1[key], data2[key]),
+                "type": "NESTED"
+            }
         else:
-            result[key] = process_key(key, "CHANGED", data1, data2)
-
+            result[key] = {
+                "key": key,
+                "old_value": data1[key],
+                "value": data2[key],
+                "type": "CHANGED"
+            }
     return dict(sorted(result.items(), key=lambda item: item))
 
 
