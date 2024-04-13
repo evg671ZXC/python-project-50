@@ -1,5 +1,5 @@
 import pytest
-from gendiff.scripts.cli import parse_args
+from gendiff.cli import parse_args
 from gendiff.generate_diff import generate_diff
 
 json_file1 = './tests/fixtures/nested/file1.json'

@@ -1,4 +1,5 @@
-from gendiff.scripts.file_reader import reader, get_extension
+from gendiff.file_reader import reader
+from gendiff.parser import parse
 from gendiff.formats.format_selector import get_out_by_format
 
 
@@ -45,7 +46,7 @@ def build_diff(data1, data2):
 
 
 def generate_diff(file1_path, file2_path, user_format="stylish"):
-    dict1 = reader(file1_path, get_extension(file1_path))
-    dict2 = reader(file2_path, get_extension(file2_path))
+    dict1 = parse(*reader(file1_path))
+    dict2 = parse(*reader(file2_path))
     diffs = build_diff(dict1, dict2)
     return get_out_by_format(diffs, user_format)

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hexlet-code"
-version = "0.9.9.5"
+version = "0.9.9.9"
 description = "Compares two configuration files and shows a difference"
 authors = ["evg671ZXC <evgmine671@gmail.com>"]
 readme = "README.md"
@@ -11,7 +11,6 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pytest-cov = "^5.0.0"
 pyyaml = "^6.0.1"
 
 
@@ -21,6 +20,8 @@ gendiff = "gendiff.scripts.gendiff:main"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.0.0"
+pytest-cov = "^5.0.0"
+
 
 [build-system]
 requires = ["poetry-core"]
