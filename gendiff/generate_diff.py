@@ -3,28 +3,31 @@ from gendiff.formats.format_selector import get_out_by_format
 
 
 def process_key(key, state, data1, data2, build_diff):
-    if isinstance(data1.get(key), dict) and isinstance(data2.get(key), dict):
+    value1 = data1.get(key)
+    value2 = data2.get(key)
+
+    if isinstance(value1, dict) and isinstance(value2, dict):
         return {"state": "NESTED",
-                "value": build_diff(data1.get(key), data2.get(key))}
-    elif data1.get(key) != data2.get(key):
+                "value": build_diff(value1, value2)}
+    elif value1 != value2:
         if state == "CHANGED":
             return {"state": state,
-                    "value": data2.get(key),
-                    "old_value": data1.get(key)}
-        elif isinstance(data1.get(key), dict):
+                    "value": value2,
+                    "old_value": value1}
+        elif isinstance(value1, dict):
             return {"state": "NESTED",
                     "sub_state": state,
-                    "value": build_diff(data1.get(key), data1.get(key))}
-        elif isinstance(data2.get(key), dict):
+                    "value": build_diff(value1, value1)}
+        elif isinstance(value2, dict):
             return {"state": "NESTED",
                     "sub_state": state,
-                    "value": build_diff(data2.get(key), data2.get(key))}
+                    "value": build_diff(value2, value2)}
         else:
             return {"state": state,
-                    "value": data2.get(key) if state == "ADDED" else data1.get(key)}
+                    "value": value2 if state == "ADDED" else value1}
     else:
         return {"state": "UNCHANGED",
-                "value": data1.get(key)}
+                "value": value1}
 
 
 def build_diff(data1, data2):
